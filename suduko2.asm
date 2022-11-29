@@ -49,31 +49,22 @@ matr9 db 32h,38h,?
 
 
 main PROC
-
     mov ax,@data
     mov ds,ax
     mov es,ax
-    lea si,matr1
+    
+    mov bx,1
+    mov si,3
 
-    mov bx,0
-    mov cx,9
-
-   volta:
-    mov dl,matr1[bx]
+    
+    mov dl,matr1[bx][si]
     mov ah,02
     int 21h
     
-    inc bx
-    inc si
-
-    cmp si,3
-    jne pl1
-    pl
-    mov si,0
-    pl1:
+   
 
     
-    loop volta
+
 
 
 
