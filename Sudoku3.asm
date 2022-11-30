@@ -36,7 +36,6 @@ matriz db 35h,33h,0,0,37h,0,0,0,0
 main PROC
     mov ax,@data
     mov ds,ax
-    CALL PRINT_MATRIZ
     volta2:
     xor si,si
     xor bx,bx
@@ -65,7 +64,6 @@ main PROC
         ESPAÇO
         inc si
         inc bx
-        INC DI
         cmp cx,1
         je fim
         cmp bx,9
@@ -79,16 +77,15 @@ main PROC
     PL
     add ch,01h
     xor bx,bx
-
+    cmp ch,3Ah
+    je fim
     mov ah,02 
     mov dl,ch
     int 21h
-      mov ah,09 
-   
+    mov ah,09 
     lea dx,msg3
     int 21h
-     cmp CH,39H
-    je fim
+  
 
 
    
@@ -111,10 +108,11 @@ main PROC
       xor si,si
       xor bx,bx
 
-      mov bl,9
+      mov bl,8
       mov ah,01
       int 21h
       sub al,30h
+      dec al
       mul bl
       mov bl,al
 
@@ -144,31 +142,5 @@ main PROC
 
     
 main ENDP
+END MAIN
 
-PRINT_MATRIZ PROC
-    RET
-PRINT_MATRIZ ENDP
-end main
-
-
-
-MOV CL, LIN_COL             ; Usado como contador de linhas  
-        MOV AH, 02h                 ; Carrega a funcao 02h (Escrita de caracter no STANDARD OUTPUT(monitor))  
-
-        OUT1:                       ;   
-            MOV CH, LIN_COL         ; Usado como contador de colunas  
-            OUT2:                       ;   
-                MOV DL, MATRIZ[BX][SI]  ; Copia a informacao da matriz para DL(entrada padrao para função 02h)  
-                OR DL, 30h              ; Converte para caracter
-                INT 21h                 ;   
-                MOV DL, 20H             ;
-                INT 21h                 ; SPACE  
-                INC SI                  ; Atualiza o endereço da matriz, deslocando para a proxima coluna  
-                DEC CH                  ;   
-            JNZ OUT2                ; LOOP1
-            MOV DL, 10              ; 
-            INT 21h                 ; LINE FEED  
-            ADD BX, LIN_COL         ; Desloca uma linha na matriz  
-            XOR SI,SI               ; Reseta as colunas
-            DEC CL                  ;   
-        JNZ OUT1
