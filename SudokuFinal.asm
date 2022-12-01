@@ -161,11 +161,20 @@ entrada PROC
       int 21h
 
     xor ah,ah
+    mov dl,gabarito[bx][si]
+    cmp al,dl
+    jne fim2
     mov matriz[bx][si],al
     pl
     pl
-    
     RET
+    fim2:
+    pl
+    pl
+    mov al,88
+    mov matriz[bx][si],al
+    RET
+
     
 entrada ENDP
 END MAIN
