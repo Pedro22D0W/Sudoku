@@ -22,7 +22,10 @@ msg1 DB "#",0B3H,"1 2 3 4 5 6 7 8 9$"
 
 msg2 db 0C4H,0C5H,18 DUP(0C4H),"$"
 msg3 db 0B3H,"$"
-
+msg4 db "selecione as cordenadas:$"
+msg5 db "selecione a coluna:$"
+msg6 db "selecione a linha:$"
+msg7 db "selecione o numero:$"
 matriz db 35h,33h,0,0,37h,0,0,0,0
        db 36h,?,?,31h,39h,35h,?,?,?
        db ?,39h,38h,?,?,?,?,36h,?
@@ -37,8 +40,24 @@ matriz db 35h,33h,0,0,37h,0,0,0,0
 
 
 main PROC
+
     mov ax,@data
     mov ds,ax
+    t:
+    call imprimir
+    call entrada
+    jmp t
+
+    mov ah,4ch
+    int 21h
+    
+main ENDP
+
+imprimir PROC
+    mov ax,@data
+    mov ds,ax
+    xor bx,bx
+    xor si,si
     lea bx,matriz
     
     mov ah,09 
@@ -83,60 +102,59 @@ main PROC
     int 21h
     loop volta
 
-       
-    
-    
-
-  fim:
-    pl
-    pl
+    fim:
+    RET
  
+imprimir ENDP
 
-   
+entrada PROC
 
-    
-
-    mov ah,4ch
-    int 21h
-
-
-    
-main ENDP
-END MAIN
-
-
-        mov dl,matriz[si]
-        mov ah,02
-        int 21h
-        ESPAÇO
-        inc si
-        inc bx
-        cmp cx,1
-        je fim
-        cmp bx,9
-        je pl1
-         cmp DI,10
-         je fim
-    loop volta
-
-    jmp fim
-    pl1:
+      
     PL
-    add ch,01h
-    xor bx,bx
-    cmp ch,3Ah
-    je fim
-    mov ah,02 
-    mov dl,ch
-    int 21h
     mov ah,09 
-    lea dl,msg3
+    lea dx,msg4
     int 21h
-  
-
-
+    pl
+    mov ah,09 
+    lea dx,msg5
+    int 21h
+      
    
-
+      mov si,9
+      mov ah,01
+      int 21h
+      sub al,30h
+      dec al
+      xor ah,ah
+      mov bx,ax
+    pl
+      mov ah,09 
+    lea dx,msg6
+    int 21h
     
-    jmp volta
+      mov ah,01
+      int 21h
+      sub al,30h
+      dec al
+      mul si
+      xor ah,ah
+      mov si,ax
 
+    pl
+      mov ah,09 
+    lea dx,msg7
+    int 21h
+
+
+      mov ah,01
+      int 21h
+
+    xor ah,ah
+    mov matriz[bx][si],al
+    pl
+    pl
+    
+    RET
+    
+entrada ENDP
+END MAIN

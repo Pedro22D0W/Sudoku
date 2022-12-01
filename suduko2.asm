@@ -11,9 +11,9 @@ PL  MACRO
 .DATA 
 
 
-msg1 db "#|012345678$"
-msg2 db "------------$"
-msg3 db "|$"
+
+l db ?
+C db ?
 matriz db 35h,33h,0,0,37h,0,0,0,0
        db 36h,?,?,31h,39h,35h,?,?,?
        db ?,39h,38h,?,?,?,?,36h,?
