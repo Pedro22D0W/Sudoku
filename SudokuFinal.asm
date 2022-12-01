@@ -26,6 +26,7 @@ msg4 db "selecione as cordenadas:$"
 msg5 db "selecione a coluna:$"
 msg6 db "selecione a linha:$"
 msg7 db "selecione o numero:$"
+
 matriz db 35h,33h,0,0,37h,0,0,0,0
        db 36h,?,?,31h,39h,35h,?,?,?
        db ?,39h,38h,?,?,?,?,36h,?
@@ -34,7 +35,17 @@ matriz db 35h,33h,0,0,37h,0,0,0,0
        db 37h,?,?,?,32h,?,?,?,36h
        db ?,36h,?,?,?,?,32h,38h,?
        db ?,?,?,34h,31h,39h,?,?,35h
-       db 31H,?,?,?,38h,?,?,37h,39h
+       db 33h,?,?,?,38h,?,?,37h,39h
+
+gabarito db 35h,33h,34h,36h,37h,38h,39h,31h,32h
+       db 36h,37h,32h,31h,39h,35h,33h,34h,38h
+       db 31h,39h,38h,33h,34h,32h,35h,36h,37h
+       db 38h,35h,39h,37h,36h,31h,34h,32h,33h
+       db 34h,32h,36h,38h,35h,33h,37h,39h,31h
+       db 37h,31h,33h,39h,32h,34h,38h,35h,36h
+       db 39h,36h,31h,35h,33h,37h,32h,38h,34h
+       db 32h,38h,37h,34h,31h,39h,36h,33h,35h
+       db 33h,34h,35h,32h,38h,36h,31h,37h,39h
 
 .CODE 
 
