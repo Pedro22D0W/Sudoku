@@ -52,11 +52,11 @@ gabarito db 35h,33h,34h,36h,37h,38h,39h,31h,32h
 
 main PROC
 
-    mov ax,@data
+    mov ax,@data      ;inicializa DS
     mov ds,ax
     t:
-    call imprimir
-    call entrada
+    call imprimir     ;chama o procediemnto imprimir para imprimir a matriz(Sudoku) na tela
+    call entrada      ;chama o procedimento entrada para o usuario manipular a matriz(Sudoku)
     jmp t
 
     mov ah,4ch
@@ -65,53 +65,62 @@ main PROC
 main ENDP
 
 imprimir PROC
-    mov ax,@data
-    mov ds,ax
-    xor bx,bx
-    xor si,si
+    
+    xor bx,bx         ;<---- zera SI e BX para iniciar os apontadores da matrix
+    xor si,si      
     lea bx,matriz
     
-    mov ah,09 
-    lea dx,msg1
-    int 21h
-    pl
-     mov ah,09 
-    lea dx,msg2
-    int 21h
-    pl
-    mov ch,31h
-    mov ah,02
-    mov dl,ch
-    int 21h
-    mov ah,09 
-    lea dx,msg3
+    mov ah,09         ;<---- exibe mensagem de 'colunas' na tela
+    lea dx,msg1       
     int 21h
 
-    mov cl,9
+    pl                ;<---- macro de pular linha
+
+     mov ah,09        ;<---- exibe mensagem de barra horizontal na tela
+    lea dx,msg2
+    int 21h
+
+    pl                ;<---- macro de pular linha
+
+    mov ch,31h        ;<---- exibe numero da linha
+    mov dl,ch
+    int 21h
+
+    mov ah,09 
+    lea dx,msg3       ;<---- exibe mensagem de barra vertical na tela
+    int 21h
+
+    mov cl,9          ;<---- inicia contador de linhas e colunas
     mov di,9
     xor bx,bx
     volta:
-    mov ah,02
+    mov ah,02         ;<---- exibe numero localizado na posiçao da matriz apontada por SI e BX
     mov dl,matriz[bx][si]
     int 21H
-    ESPAÇO
-    inc si
-    dec di
-    jnz volta
-    PL
-    xor si,si
-    mov di,9
-    add bx,9
-    add ch,01h
-    cmp ch,3Ah
-    je fim
-    mov ah,02 
+
+    ESPAÇO            ;<---- macro de espaçamento entre os numeros
+
+    inc si            ;<---- incrementa SI para exibir o proximo numero da linha
+    dec di            ;<---- decrementa DI até todos os elementos da linha serem exebidos
+    jnz volta         ;<---- quando DI for igual a zero iniciar processo de ir para a proxima linha
+
+    PL                ;<---- macro de pular linha
+
+    xor si,si         ;<---- zera SI para voltar para o primeiro elemento da linha
+    mov di,9          ;<---- adiciona o numero de colunas
+    add bx,9          ;<---- adiciona em bx o numero de colunas,para ir para proxima linha
+    add ch,01h        ;<---- aumenta o numero da coluna em 1
+    cmp ch,3Ah        ;<---- checa se o numero da coluna é maior que 9
+    je fim            ;<---- se o numero da coluna é maior que 9 pula para o RET
+
+    mov ah,02         ;<---- exibe numero da linha
     mov dl,ch
     int 21h
-    mov ah,09 
+
+    mov ah,09         ;<---- exibe mensagem de barra vertical na tela
     lea dx,msg3
     int 21h
-    loop volta
+    loop volta         ;<---- repete prcesso até serem exibidas todas s linhas
 
     fim:
     RET
@@ -121,57 +130,66 @@ imprimir ENDP
 entrada PROC
 
       
-    PL
+    PL                 ;<---- macro de pular linha
     mov ah,09 
-    lea dx,msg4
+    lea dx,msg4        ;<---- exibe mensagem de selecinar cordenadas na tela
     int 21h
-    pl
-    mov ah,09 
+
+    pl                 ;<---- macro de pular linha
+
+    mov ah,09          ;<---- exibe mensagem de selecinar coluna na tela
     lea dx,msg5
     int 21h
       
    
-      mov si,9
-      mov ah,01
+      mov si,9        ;<---- inicia SI com 9 para selecionar a linha correspondente
+      mov ah,01       ;<---- função ah1 para o usuario digitar cordenadas da coluna
       int 21h
-      sub al,30h
-      dec al
-      xor ah,ah
-      mov bx,ax
-    pl
-      mov ah,09 
-    lea dx,msg6
-    int 21h
-    
-      mov ah,01
-      int 21h
-      sub al,30h
-      dec al
-      mul si
-      xor ah,ah
-      mov si,ax
+      and al,0fh      ;<---- transforma caracter em numero 
+      dec al          ;<---- decrementa al para cordenadas visualizadas pelo usuario correspondam as da matriz
+      xor ah,ah       ;<---- zera ah para enviar somente o conteudo de al para bx
+      mov bx,ax       ;<---- move cordenada da coluna selecionada para bx
+      
+    pl                ;<---- macro de pular linha
 
-    pl
-      mov ah,09 
+      mov ah,09       ;<---- exibe mensagem de selecinar linha na tela
+      lea dx,msg6
+      int 21h
+    
+      mov ah,01       ;<---- função ah1 para o usuario digotar cordenadas da linha
+      int 21h
+      and al,0fh      ;<---- transforma caracter em numero 
+      dec al          ;<---- decrementa al para cordenadas visualizadas pelo usuario correspondam as da matriz
+      mul si          ;<---- multiplica al por 9 para ir para linha correspondente
+      xor ah,ah       ;<---- zera ah para enviar somente o conteudo de al para bx
+      mov si,ax       ;<---- move cordenada da linha selecionada para bx
+
+    pl                ;<---- macro de pular linha
+
+    mov ah,09         ;<---- exibe mensagem de selecionar numero
     lea dx,msg7
     int 21h
 
 
-      mov ah,01
-      int 21h
+    mov ah,01         ;<---- seleciona o numero que sera colocado na cordenada escolhida
+    int 21h
 
-    xor ah,ah
-    mov dl,gabarito[bx][si]
-    cmp al,dl
-    jne fim2
-    mov matriz[bx][si],al
-    pl
-    pl
+
+    mov dl,gabarito[bx][si]   ;<---- move o numero corresponde as cordenadas selecionadas da matriz gabarito para dl
+    cmp al,dl                 ;<---- compara o numero selecionado com o numero correto
+    jne fim2                  ;<---- se o numero digitado for errado pula para fim2
+    mov matriz[bx][si],al     ;<---- se o numero digitado for correto o numero é enviado para matriz
+
+    pl                        ;<---- macro de pular linha
+    pl                        ;<---- macro de pular linha
+
     RET
     fim2:
-    pl
-    pl
-    mov al,88
+
+    pl                        ;<---- macro de pular linha
+    pl                        ;<---- macro de pular linha
+    
+    mov al,88                 ;<---- se o numero digitado for incorreto enviar o caracter "X" para matriz
     mov matriz[bx][si],al
     RET
 
