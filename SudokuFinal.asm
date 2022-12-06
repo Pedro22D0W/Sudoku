@@ -1,4 +1,30 @@
 .MODEL SMALL
+
+MM macro
+
+
+   lea si,matriz2 
+    lea di,matriz 
+    mov cx,81
+    volta1:
+    movsb 
+    loop volta1
+
+endm
+    
+MG macro
+
+
+   lea si,gabarito2 
+    lea di,gabarito  
+    mov cx,81
+    volta2:
+    movsb 
+    loop volta2
+   
+    
+ENDM
+
 PL  MACRO 
 
     mov ah,02
@@ -26,6 +52,10 @@ msg4 db "selecione as cordenadas:$"
 msg5 db "selecione a coluna:$"
 msg6 db "selecione a linha:$"
 msg7 db "selecione o numero:$"
+msg8 db "selecionar dificuldade:$"
+msg9 db "facil-1$"
+msgA db "dificil-2$"
+msgB db "VOCE GANHOU!!!!!!!!$"
 
 matriz db 35h,33h,0,0,37h,0,0,0,0
        db 36h,?,?,31h,39h,35h,?,?,?
@@ -47,17 +77,83 @@ gabarito db 35h,33h,34h,36h,37h,38h,39h,31h,32h
        db 32h,38h,37h,34h,31h,39h,36h,33h,35h
        db 33h,34h,35h,32h,38h,36h,31h,37h,39h
 
+matriz2 db 38h,37h,?,?,39h,?,?,35h,32h
+        db ?,?,?,?,?,?,?,?,?
+        db 33h,?,39h,?,38h,?,?,?,?
+        db ?,?,?,37h,?,39h,34h,?,?
+        db ?,35h,?,?,33h,?,39h,?,?
+        db ?,?,38h,36h,35h,?,?,33h,37h
+        db ?,38h,32h,?,?,?,35h,37h,?
+        db ?,34h,?,?,32h,?,36h,?,38h
+        db 36h,?,?,31h,?,?,33h,?,34h
+
+       
+
+     
+
+gabarito2   db 38h,37h,34h,33h,39h,36h,31h,35h,32h
+            db 35h,36h,31h,32h,34h,37h,38h,39h,33h
+            db 33h,32h,39h,35h,38h,31h,37h,34h,36h
+            db 32h,33h,36h,37h,31h,39h,34h,38h,35h
+            db 34h,35h,37h,38h,33h,32h,39h,36h,31h
+            db 39h,31h,38h,36h,35h,34h,32h,33h,37h
+            db 31h,38h,32h,34h,36h,33h,35h,37h,39h
+            db 37h,34h,33h,39h,32h,35h,36h,31h,38h
+            db 36h,39h,35h,31h,37h,38h,33h,32h,34h
+            
 .CODE 
+
 
 
 main PROC
 
+    lea bx,matriz
     mov ax,@data      ;inicializa DS
     mov ds,ax
+    mov es,ax
+
+    mov ah,09
+    lea dx,msg8
+    int 21h
+    pl
+    mov ah,09
+    lea dx,msg9
+    int 21h
+    ESPAÇO
+    ESPAÇO
+    mov ah,09
+    lea dx,msgA
+    int 21h
+    pl
+
+    mov ah,01
+    int 21h
+    mov bh,al
+    pl
+    pl
+    
+
+    cmp bh,32h
+    jne pula
+    
+    MM
+    MG
+   
+    pula:
     t:
     call imprimir     ;chama o procediemnto imprimir para imprimir a matriz(Sudoku) na tela
     call entrada      ;chama o procedimento entrada para o usuario manipular a matriz(Sudoku)
-    jmp t
+    LEA SI,matriz
+    LEA DI,gabarito
+    CMPSB
+    jz t
+    pl
+    call imprimir
+
+    mov ah,09
+    lea dx,msgB
+    int 21h
+
 
     mov ah,4ch
     int 21h
@@ -195,4 +291,6 @@ entrada PROC
 
     
 entrada ENDP
+
+
 END MAIN
