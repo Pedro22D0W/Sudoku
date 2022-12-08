@@ -1,4 +1,6 @@
+title Pedro Rodolfo Silva Galvão Santos(22886287) Luis Guilherme Pilotto de Menezes Regu(22013635)
 .MODEL SMALL
+
 
 MM MACRO               ;<---- macro para trocar a dificuldade.
 
