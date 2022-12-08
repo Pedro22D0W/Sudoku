@@ -1,51 +1,47 @@
 .MODEL SMALL
 
-MM macro
+MM MACRO               ;<---- macro para trocar a dificuldade.
 
-
-   lea si,matriz2 
+    lea si,matriz2 
     lea di,matriz 
     mov cx,81
     volta1:
     movsb 
     loop volta1
 
-endm
+    ENDM
     
-MG macro
+MG MACRO                ;<---- macro para trocar o gabarito da dificuldade escolhida.
 
-
-   lea si,gabarito2 
+    lea si,gabarito2 
     lea di,gabarito  
     mov cx,81
     volta2:
     movsb 
     loop volta2
    
-    
-ENDM
+    ENDM
 
-PL  MACRO 
+PL  MACRO               ;<---- macro para pular linha
 
     mov ah,02
     mov dl,10
     int 21h
 
-    
     ENDM
 
-ESPAÇO MACRO
-     mov ah,02
+ESPAÇO MACRO            ;<---- macro para dar um ESPAÇO
+
+    mov ah,02
     mov dl,32
     int 21h
+
     ENDM
+
 .stack 100h
 .DATA 
 
 msg1 DB "#",0B3H,"1 2 3 4 5 6 7 8 9$"
-
-
-
 msg2 db 0C4H,0C5H,18 DUP(0C4H),"$"
 msg3 db 0B3H,"$"
 msg4 db "selecione as cordenadas:$"
@@ -68,14 +64,14 @@ matriz db 35h,33h,0,0,37h,0,0,0,0
        db 33h,?,?,?,38h,?,?,37h,39h
 
 gabarito db 35h,33h,34h,36h,37h,38h,39h,31h,32h
-       db 36h,37h,32h,31h,39h,35h,33h,34h,38h
-       db 31h,39h,38h,33h,34h,32h,35h,36h,37h
-       db 38h,35h,39h,37h,36h,31h,34h,32h,33h
-       db 34h,32h,36h,38h,35h,33h,37h,39h,31h
-       db 37h,31h,33h,39h,32h,34h,38h,35h,36h
-       db 39h,36h,31h,35h,33h,37h,32h,38h,34h
-       db 32h,38h,37h,34h,31h,39h,36h,33h,35h
-       db 33h,34h,35h,32h,38h,36h,31h,37h,39h
+         db 36h,37h,32h,31h,39h,35h,33h,34h,38h
+         db 31h,39h,38h,33h,34h,32h,35h,36h,37h
+         db 38h,35h,39h,37h,36h,31h,34h,32h,33h
+         db 34h,32h,36h,38h,35h,33h,37h,39h,31h
+         db 37h,31h,33h,39h,32h,34h,38h,35h,36h
+         db 39h,36h,31h,35h,33h,37h,32h,38h,34h
+         db 32h,38h,37h,34h,31h,39h,36h,33h,35h
+         db 33h,34h,35h,32h,38h,36h,31h,37h,39h
 
 matriz2 db 38h,37h,?,?,39h,?,?,35h,32h
         db ?,?,?,?,?,?,?,?,?
@@ -91,71 +87,68 @@ matriz2 db 38h,37h,?,?,39h,?,?,35h,32h
 
      
 
-gabarito2   db 38h,37h,34h,33h,39h,36h,31h,35h,32h
-            db 35h,36h,31h,32h,34h,37h,38h,39h,33h
-            db 33h,32h,39h,35h,38h,31h,37h,34h,36h
-            db 32h,33h,36h,37h,31h,39h,34h,38h,35h
-            db 34h,35h,37h,38h,33h,32h,39h,36h,31h
-            db 39h,31h,38h,36h,35h,34h,32h,33h,37h
-            db 31h,38h,32h,34h,36h,33h,35h,37h,39h
-            db 37h,34h,33h,39h,32h,35h,36h,31h,38h
-            db 36h,39h,35h,31h,37h,38h,33h,32h,34h
+gabarito2 db 38h,37h,34h,33h,39h,36h,31h,35h,32h
+          db 35h,36h,31h,32h,34h,37h,38h,39h,33h
+          db 33h,32h,39h,35h,38h,31h,37h,34h,36h
+          db 32h,33h,36h,37h,31h,39h,34h,38h,35h
+          db 34h,35h,37h,38h,33h,32h,39h,36h,31h
+          db 39h,31h,38h,36h,35h,34h,32h,33h,37h
+          db 31h,38h,32h,34h,36h,33h,35h,37h,39h
+          db 37h,34h,33h,39h,32h,35h,36h,31h,38h
+          db 36h,39h,35h,31h,37h,38h,33h,32h,34h
             
 .CODE 
-
-
-
 main PROC
 
     lea bx,matriz
-    mov ax,@data      ;inicializa DS
-    mov ds,ax
-    mov es,ax
+    mov ax,@data      
+    mov ds,ax        ;<---- inicializa DS
+    mov es,ax        ;<---- inicializa ES
 
-    mov ah,09
+    mov ah,09        ;<---- exibe mensagem de 'dificuldade' na tela
     lea dx,msg8
     int 21h
-    pl
-    mov ah,09
+    pl               ;<---- macro de espaçamento entre os numeros
+    mov ah,09        ;<---- exibe mensagem de 'facil-1' na tela
     lea dx,msg9
     int 21h
-    ESPAÇO
-    ESPAÇO
-    mov ah,09
+    ESPAÇO           ;<---- macro de espaçamento entre os numeros
+    ESPAÇO           ;<---- macro de espaçamento entre os numeros
+    mov ah,09        ;<---- exibe mensagem de 'dificil-2' na tela
     lea dx,msgA
     int 21h
-    pl
+    pl               ;<---- macro de espaçamento entre os numeros
 
-    mov ah,01
+    mov ah,01        ;<---- entrada da dificuldade, o usuario escolhe
     int 21h
     mov bh,al
-    pl
-    pl
+    pl               ;<---- macro de pular linha
+    pl               ;<---- macro de pular linha
     
-
-    cmp bh,32h
+    cmp bh,32h       ;<---- verifica a dificuldade, se for dificil (2) ele não entra no jne 
     jne pula
     
-    MM
-    MG
+    MM               ;<---- macro para trocar a dificuldade.
+    MG               ;<---- macro para trocar o gabarito da dificuldade escolhida.
    
     pula:
     t:
-    call imprimir     ;chama o procediemnto imprimir para imprimir a matriz(Sudoku) na tela
-    call entrada      ;chama o procedimento entrada para o usuario manipular a matriz(Sudoku)
-    LEA SI,matriz
-    LEA DI,gabarito
-    CMPSB
-    jz t
-    pl
-    call imprimir
+    mov ax,3
+    int 10h
+    call imprimir    ;<---- chama o procediemnto imprimir para imprimir a matriz(Sudoku) na tela
+    call entrada     ;<---- chama o procedimento entrada para o usuario manipular a matriz(Sudoku)
+    lea si,matriz    ;<---- aponta matriz
+    lea di,gabarito  ;<---- aponta gabarito
+    cmpsb            ;<---- compara matriz e gabarito, retornando ZF
+    jz t              
+    pl               ;<---- macro de pular linha
+    call imprimir    ;<---- chama a funçao mais uma vez de imprimir
 
-    mov ah,09
+    mov ah,09        ;<---- exibe a mensagem de VITORIA
     lea dx,msgB
     int 21h
 
-
-    mov ah,4ch
+    mov ah,4ch       ;<---- finaliza o programa
     int 21h
     
 main ENDP
@@ -224,8 +217,7 @@ imprimir PROC
 imprimir ENDP
 
 entrada PROC
-
-      
+    
     PL                 ;<---- macro de pular linha
     mov ah,09 
     lea dx,msg4        ;<---- exibe mensagem de selecinar cordenadas na tela
@@ -237,7 +229,6 @@ entrada PROC
     lea dx,msg5
     int 21h
       
-   
       mov si,9        ;<---- inicia SI com 9 para selecionar a linha correspondente
       mov ah,01       ;<---- função ah1 para o usuario digitar cordenadas da coluna
       int 21h
@@ -266,10 +257,8 @@ entrada PROC
     lea dx,msg7
     int 21h
 
-
     mov ah,01         ;<---- seleciona o numero que sera colocado na cordenada escolhida
     int 21h
-
 
     mov dl,gabarito[bx][si]   ;<---- move o numero corresponde as cordenadas selecionadas da matriz gabarito para dl
     cmp al,dl                 ;<---- compara o numero selecionado com o numero correto
@@ -289,8 +278,5 @@ entrada PROC
     mov matriz[bx][si],al
     RET
 
-    
 entrada ENDP
-
-
 END MAIN
