@@ -52,6 +52,7 @@ msg8 db "selecionar dificuldade:$"
 msg9 db "facil-1$"
 msgA db "dificil-2$"
 msgB db "VOCE GANHOU!!!!!!!!$"
+msgC db "COMO JOGAR:",10,"apos selecionar a dificuldade o jogador devera escolher as cordenadas de coluna e linha,depois digitar o numero que ira para aquela posicao na matriz,se o numero estiver correto ele aparecera na matriz se estiver incorreto um X aparecera nolugar$"
 
 matriz db 35h,33h,0,0,37h,0,0,0,0
        db 36h,?,?,31h,39h,35h,?,?,?
@@ -104,6 +105,12 @@ main PROC
     mov ax,@data      
     mov ds,ax        ;<---- inicializa DS
     mov es,ax        ;<---- inicializa ES
+
+    mov ah,09        ;<---- exibe mensagem de 'instruções' na tela
+    lea dx,msgC
+    int 21h
+    pl
+    pl
 
     mov ah,09        ;<---- exibe mensagem de 'dificuldade' na tela
     lea dx,msg8
